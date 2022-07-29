@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Races From all Users</h1>
+<div class="row">
+
+        <div class="portfolio-page">
+            {% for race in races %}
+            <div class="portfolio-group">
+              <a href = "{% url 'detail' race.id %}">
+                <div class="portfolio-item" >
+                    {% for photo in race.photo_set.all %}
+                    <img src="{{photo.url}}" alt="avatarHi" border="0">
+                    {% empty %}
+                    
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSkdGbj-QrUuNqhXP7DtY3-t8yD6H1Tk4uFg&usqp=CAU" alt="DNF" border="0">
+                    {% endfor %}
+                    <div class="detail">
+                      <h3>{{race.race_name}}</h3>
+                      <p>Year: {{ race.year }} Type: {{ race.race_type }}</p>
+                      <p>Racer: {{race.user}}
+                      {% if race.goals.count %}
+                      <p style:  style="color:green;">COMPLETED</p>
+                      {% else %}
+                      <p style="color:red;">PENDING OR DNF</p>
+                      {% endif %}
+                    </div>
+                  </div>				
+                </div>
+              </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+

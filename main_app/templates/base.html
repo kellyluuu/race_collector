@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+    <!-- CSS only -->
+      <!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+      {% comment %} <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> {% endcomment %}
+      {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>  {% endcomment %}
+      <link href={% static "css/font-awesome.min.css" %} rel="stylesheet" type="text/css">
+      <link rel="stylesheet" type="text/css" href={% static 'css/style.css' %}>
+      <link href={% static "css/magnific-popup.css" %} rel="stylesheet">  
+      <link href={% static "css/templatemo_style.css" %} rel="stylesheet" type="text/css">	 
+
+    <title>Race Collector</title>
+</head>
+<body>
+        <nav class="main-nav">
+            <div class="left"><a href="/about/"><h4>RACE COLLECTOR</h4></a></div>
+            <ul class="nav right center-text">
+                <li class="btn"><a href="{% url 'home' %}">ALL RACES</a></li>
+                <li class="btn"><a href="{% url 'index' %}">MY RACES</a></li> 
+                <li class="btn"><a href="{% url 'goals_index' %}">MY GOALS</a></li>
+                {% if user.is_authenticated %}
+                <li class="btn"><a href="{% url 'races_create' %}">NEW RACE</a></li>
+                <li class="btn"><a href="{% url 'goals_create' %}">NEW GOAL</a></li>
+                <li class="btn"><a href="{% url 'logout' %}">LOGOUT</a></li>
+                {% else %}
+                <li class="btn"><a href="{% url 'signup' %}">SIGNUP</a></li>
+                <li class="btn"><a href="{% url 'login' %}">LOGIN</a></li>
+                {% endif %}
+            </ul>
+      </nav>
+
+      {% block content %}
+      
+      {% endblock %}
+
+      <footer class="page-footer">
+          <div class="right">All Rights Reserved, &copy; 2022 My Races &nbsp;</div>
+        </footer>
+        <script type="text/javascript" src={% static "js/jquery-1.11.1.min.js"%}></script>
+        <script type="text/javascript" src={% static "js/jquery.easing.1.3.js"%}></script>
+        <script type="text/javascript" src={% static "js/modernizr.2.5.3.min.js"%}></script>
+        <script type="text/javascript" src={% static "js/jquery.magnific-popup.min.js"%}></script> 
+        <script type="text/javascript" src={% static "js/templatemo_script.js" %}></script>
+        {% comment %} <script type="text/javascript">
+            $(function () {
+                $('.pagination li').click(changePage);
+                $('.portfolio-item').magnificPopup({ 
+                    type: 'image',
+                    gallery:{
+                        enabled:true
+                    }
+                });
+            });
+        </script>	 {% endcomment %}
+
+  </body>
+  </html>

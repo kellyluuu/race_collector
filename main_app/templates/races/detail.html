@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+  <div class="col s6">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">{{race.race_name}}</span>
+        <p>Year: {{ race.year }}</p>
+        <p>Athlinks: <a href = "{{ race.link }}">Link</a></p>
+        <p>Type: {{ race.race_type }}</p>
+        <p>Distance: {{ race.distance }}</p>
+        {% if race.goals.count %}
+        <p style:  style="color:green;">COMPLETED</p>
+        {% else %}
+        <p style="color:red;">PENDING OR DNF</p>
+        {% endif %}
+      </div>
+      {% if request.user.id == race.user_id %}
+      <div class="card-action">
+        <a href="{% url 'races_update' race.id %}"><button>Edit</button></a>
+        <a href="{% url 'races_delete' race.id %}"><button style= "color:red;"> Delete</button></a>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="portfolio-page">
+      {% for race in races %}
+      <a href = "{% url 'detail' race.id %}">
+      <div class="portfolio-group">
+          <div class="portfolio-item" >
+              {% for photo in race.photo_set.all %}
+              <img src="{{photo.url}}" alt="avatarHi" border="0">
+              {% empty %}
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSkdGbj-QrUuNqhXP7DtY3-t8yD6H1Tk4uFg&usqp=CAU" alt="DNF" border="0"></a>
+              {% endfor %}
+              <div class="detail">
+                <h3>{{race.race_name}}</h3>
+                <p>Year: {{ race.year }}</p>
+                <p>Type: {{ race.race_type }}</p>
+                {% if race.goals.count %}
+                <p style:  style="color:green;">COMPLETED</p>
+                {% else %}
+                <p style="color:red;">PENDING OR DNF</p>
+                {% endif %}
+              </div>
+            </div>				
+          </div>
+        </a>
+      {% endfor %}
+  </div>
+</div>
+    <!-- Insert photo markup below this comment -->
+    <div class="portfolio-group">
+
+    {% for photo in race.photo_set.all %}
+    <img class="responsive-img card-panel" src="{{photo.url}}">
+    {% empty %}
+    <div class="card-panel teal-text center-align">No Photos Uploaded</div>
+    {% endfor %}
+    </div>
+    <!-- new code below -->
+    {% if request.user.id == race.user_id %}
+<form action="{% url 'add_photo' race.id %}" enctype="multipart/form-data" method="POST" class="card-panel">
+  {% csrf_token %}
+  <input type="file" name="photo-file">
+  <br><br>
+  <input type="submit" class="btn" value="Upload Photo">
+</form>
+
+  </div>
+  
+  <div class="left">
+    <form action="{% url 'add_training' race.id %}" method = "post">
+      {% csrf_token %}
+      {{ training_form.as_p }}
+      <input type = 'submit' class='btn' value='Set Training Schedule'>
+    </form>
+    <br>
+    {% endif%}
+
+    
+    <table id="training">
+      <thead>
+        <tr><th>Date</th><th>Activity</th><th>Distance</th><th>Duration</th></tr>
+      </thead>
+      <tbody>
+        {% for training in race.training_set.all %}
+        <tr>
+          <td>{{training.date}}</td>
+          <td>{{training.activity}}</td>
+          <td>{{training.distance}}</td>
+          <td>{{training.duration}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% if request.user.id == race.user_id %}
+  <hr>
+<div class="row">
+  <div class="col s6">
+    {% if race.goals.count %}
+    <h3><b>Goals accomplished from this race</b></h3>
+    {% for goal in race.goals.all %}
+        <div class="card">
+      <div class="card-content">
+        <span class="card-title">
+           <span>{{ goal.goal_race }}</span>
+            </span>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <h5>Did you complete the race? Assign a completed goals</h5>
+    {% endif %}
+  </div>
+
+  <div class="col s6">
+    {% if goals.count %}
+    <h3><b>Assigned Completed Race Type - If you completed the race </b></h3>
+      {% for goal in goals.all %}
+<div class="left">
+      <form class ="table" action="{% url 'assoc_goal' race.id goal.id %}" method="post">
+              <span >{{ goal.goal_race }}</span> 
+              {% csrf_token %}
+              <button type="submit" class="btn">Add</button>
+            </form>
+          </div>
+       
+       
+      {% endfor %}
+  
+    {% endif %}
+    {% endif %}
+  </div>
+
+<script>
+  var dateEl = document.getElementById('id_date');
+  M.Datepicker.init(dateEl, {
+    format: 'yyyy-mm-dd',
+    defaultDate: new Date(),
+    setDefaultDate: true,
+    autoClose: true
+  });
+
+  var selectEl = document.getElementById('id_type');
+  M.FormSelect.init(selectEl);
+
+</script>
+{% endblock %}

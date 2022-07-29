@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Goals List</h1>
+
+{% for goal in goal_list %}
+{% if request.user.id == goal.user_id %}
+  <a href="{% url 'goals_detail' goal.id %}">
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">{{ goal.goal_race }}</span>
+        </div>
+    </div>
+  </a>
+  {% endif%}
+{% endfor %}
+
+{% endblock %}
